@@ -9,4 +9,4 @@ filenames.each do |filename|
     file_data = file.read.gsub('XX',day)
     File.open("days/day#{day}/#{filename.gsub('XX',day)}", "w") { |f| f.write file_data }
 end
-File.rename "days/day#{day}/day#{day}_spec.rb", "spec/day#{day}_rspec.rb"
+File.rename "days/day#{day}/day#{day}_spec.rb", "spec/day#{day}_spec.rb"
