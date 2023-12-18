@@ -7,7 +7,7 @@ RSpec.describe Day15, '#solve' do
 
   it 'part 1 works with input' do
     str = File.open('./days/day15/input').read
-    expect(Day15.part1(str)).to eq 515210
+    expect(Day15.part1(str)).to eq nil
   end
 
   it 'part 2 works with sample' do
@@ -17,6 +17,6 @@ RSpec.describe Day15, '#solve' do
 
   it 'part 2 works with input' do
     str = File.open('./days/day15/input').read
-    expect(Day15.part2(str)).to eq 246762
+    expect(Day15.part2(str)).to eq nil
   end
 end

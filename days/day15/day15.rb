@@ -1,47 +1,42 @@
 require 'set'
 module Day15
   def self.parse(input)
-    input.split(",")
+    input.split(',')
   end
 
-  def self.hash(step)
-    current_value = 0
-    step.chars.each do |c|
-      current_value += c.ord
-      current_value *= 17
-      current_value %= 256
+  def self.hash(line)
+    current = 0
+    line.each_byte do |c|
+      current = ((current + c)*17)%256
     end
-    current_value
+    current
   end
 
   def self.part1(input)
-    parse(input).sum do |step|
-      hash(step)
-    end
+    params = parse(input)
+    params.sum { hash(_1)}
   end
 
   def self.part2(input)
-    boxes = {}
-    parse(input).each do |step|
-      if step[/\=/]
-        label, focal_length = step.split("=")
-        box_id = hash(label)
-        boxes[box_id] ||= []
-        if boxes[box_id].find{|l, _| l == label}
-          boxes[box_id] = boxes[box_id].map{|b| b[0] == label ? [label, focal_length.to_i] : b}
-        else
-          boxes[box_id] << [label, focal_length.to_i]
-        end
+    params = parse(input)
+    boxes = Array.new(256) { {} }
+    params.each do |x|
+      if x[-1] == '-'
+        variable = x.chop
+        box = boxes[hash(variable)]
+        box.delete(variable)
       else
-        label = step.delete("-")
-        box_id = hash(label)
-        boxes[box_id]&.reject!{|l, _| l == label}
+        variable, value = x.split('=')
+        box = boxes[hash(variable)]
+        box[variable] = value.to_i
       end
     end
-    boxes.sum do |k, lenses|
-      lenses.map.with_index(1) do |(_, focal_length), index|
-        (k + 1) * index * focal_length
-      end.sum
+    sum = 0
+    boxes.each_with_index do |box, index|
+      box.each_value.with_index do |val, index2|
+        sum += (index + 1) * (index2 + 1) * val
+      end
     end
+    sum
   end
 end
